@@ -46,6 +46,7 @@ div.Calculator input::placeholder {
 div.Calculator div.button {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
 div.Calculator div.button button {
@@ -58,7 +59,7 @@ div.Calculator div.button button {
     color: #ffffff;
     font-size: 20px;
     box-shadow: -8px -8px 15px rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
+    transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease;
     cursor: pointer;
 }
 
