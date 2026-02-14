@@ -1,28 +1,49 @@
-let input = document.getElementById('inputBox');
+// Get reference to input field
+const input = document.getElementById('inputBox');
 
-let buttons = document.querySelectorAll('button');
+// Track current input
+let currentInput = "";
 
-let string = "";
+// Reference all buttons inside calculator
+const buttons = document.querySelectorAll('.Calculator button');
 
-let arr = Array.from(buttons);
+// Loop through buttons and attach click logic
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        const value = button.innerText; // Get the button text
 
-arr.forEach(button => {
-    button.addEventListener('click', (e) => {
-        if (e.target.innerHTML == '=') {
-            string = eval(string);
-            input.value = string;
+        switch (value) {
+            case '=':
+                // Evaluate safely
+                if (currentInput.trim() === "") return;
+
+                try {
+                    // Use Function constructor instead of eval for slightly safer evaluation
+                    currentInput = Function('"use strict";return (' + currentInput + ')')();
+                    input.value = currentInput;
+                } catch (err) {
+                    input.value = "Error";
+                    currentInput = "";
+                }
+                break;
+
+            case 'AC':
+                currentInput = "";
+                input.value = "";
+                break;
+
+            case 'DEL':
+                currentInput = currentInput.slice(0, -1); // Remove last character
+                input.value = currentInput;
+                break;
+
+            default:
+                // Append only valid characters (digits, operators, decimal)
+                if (/[\d+\-*/%.]/.test(value)) {
+                    currentInput += value;
+                    input.value = currentInput;
+                }
+                break;
         }
-        else if (e.target.innerHTML == 'AC') {
-            string = "";
-            input.value = string;
-        }
-        else if (e.target.innerHTML == 'DEL'){
-            string = string.substring(0, string.length-1);
-            input.value = string;
-        }
-        else {
-            string += e.target.innerHTML;
-            input.value = string;
-        }
-    })
-})
+    });
+});
