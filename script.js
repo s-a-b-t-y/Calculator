@@ -1,42 +1,63 @@
-switch (value) {
-    case '=':
-        if (currentInput.trim() === "") return;
-        try {
-            currentInput = Function('"use strict";return (' + currentInput + ')')();
-            input.value = currentInput;
-        } catch (err) {
-            input.value = "Error";
-            currentInput = "";
-        }
-        break;
+const input = document.getElementById("inputBox");
+let currentInput = "";
 
-    case 'AC':
-        currentInput = "";
-        input.value = "";
-        break;
+// Select all buttons
+const buttons = document.querySelectorAll("button");
 
-    case 'DEL':
-        currentInput = currentInput.slice(0, -1);
-        input.value = currentInput;
-        break;
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        const value = button.textContent.trim();
 
-    case '%':
-        // Convert current input to percentage
-        if (currentInput.trim() !== "") {
-            try {
-                currentInput = Function('"use strict";return (' + currentInput + '/100)')();
-                input.value = currentInput;
-            } catch (err) {
-                input.value = "Error";
+        switch (value) {
+            case '=':
+                if (currentInput.trim() === "" || /[^\d+\-*/.%()]$/.test(currentInput)) {
+                    input.value = "Error";
+                    currentInput = "";
+                    return;
+                }
+                try {
+                    // Use Function for safer evaluation (avoids global scope issues)
+                    currentInput = Function('"use strict";return (' + currentInput + ')')();
+                    input.value = currentInput;
+                } catch (err) {
+                    input.value = "Error";
+                    currentInput = "";
+                }
+                break;
+
+            case 'AC':
                 currentInput = "";
-            }
-        }
-        break;
+                input.value = "";
+                break;
 
-    default:
-        if (/[\d+\-*/.]/.test(value)) {  // removed % from regex
-            currentInput += value;
-            input.value = currentInput;
+            case 'DEL':
+                currentInput = currentInput.slice(0, -1);
+                input.value = currentInput;
+                break;
+
+            case '%':
+                if (currentInput.trim() !== "" && !isNaN(currentInput)) {
+                    try {
+                        currentInput = Function('"use strict";return (' + currentInput + '/100)')();
+                        input.value = currentInput;
+                    } catch (err) {
+                        input.value = "Error";
+                        currentInput = "";
+                    }
+                }
+                break;
+
+            default:
+                // Improved validation: Allow numbers, "00", ".", and operators, but prevent invalid starts or multiple decimals/operators
+                if ((/^\d$/.test(value) || value === "00" || value === ".") && 
+                    !(value === "." && currentInput.includes(".")) && 
+                    !(currentInput === "" && /[\-*/]/.test(value))) {
+                    currentInput += value;
+                } else if (/^[\+\-\*\/]$/.test(value) && currentInput !== "" && !/[\+\-\*\/]$/.test(currentInput)) {
+                    currentInput += value;
+                }
+                input.value = currentInput;
+                break;
         }
-        break;
-}
+    });
+});

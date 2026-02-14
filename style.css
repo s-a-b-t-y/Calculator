@@ -27,17 +27,17 @@ div.Calculator {
 }
 
 div.Calculator input {
-    /* width: 320px; */
+    width: calc(100% - 20px); /* Adjusted for better fit */
     border: none;
     padding: 24px;
     margin: 10px;
-    /* background: transparent; */
     background: rgba(255, 255, 255, 0.05);
     box-shadow: 0px 3px 15px rgba(84, 84, 84, 0.1);
     font-size: 40px;
     text-align: right;
     cursor: pointer;
     color: #ffffff;
+    border-radius: 8px;
 }
 
 div.Calculator input::placeholder {
@@ -54,9 +54,8 @@ div.Calculator div.button button {
     border: none;
     width: 100%;
     aspect-ratio: 1/1;
-    margin: 10px;
+    margin: 5px 0; /* Reduced margin for better spacing */
     border-radius: 50%;
-    /* background: transparent; */
     background-color: rgba(255, 255, 255, 0.05);
     color: #ffffff;
     font-size: 20px;
@@ -69,7 +68,6 @@ div.Calculator div.button button:active {
     transform: scale(0.97);
 }
 
-
 div.Calculator div.button button.equalbutton {
     background-color: #fb7c14;
 }
@@ -78,8 +76,7 @@ div.Calculator div.button button.operator {
     color: #6dee0a;
 }
 
-
-/* hover effects */
+/* Hover effects */
 div.Calculator div.button button:hover {
     transform: scale(1.05);
     transition: 0.2s ease;
@@ -95,18 +92,53 @@ div.Calculator div.button button.equalbutton:hover {
     background-color: #ff9933;
 }
 
-
-
-
-
+/* Responsive design */
+@media (max-width: 768px) {
+    div.Calculator {
+        max-width: 350px;
+        padding: 15px;
+    }
+    div.Calculator input {
+        font-size: 32px;
+        padding: 20px;
+    }
+    div.Calculator div.button button {
+        font-size: 18px;
+        margin: 3px 0;
+    }
+    div.Calculator div.button {
+        gap: 8px;
+    }
+}
 
 @media (max-width: 480px) {
+    div.Calculator {
+        max-width: 300px;
+        padding: 10px;
+    }
     div.Calculator input {
         font-size: 28px;
         padding: 16px;
     }
-
     div.Calculator div.button button {
         font-size: 16px;
+        margin: 2px 0;
+    }
+    div.Calculator div.button {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 320px) {
+    div.Calculator {
+        max-width: 250px;
+        padding: 8px;
+    }
+    div.Calculator input {
+        font-size: 24px;
+        padding: 12px;
+    }
+    div.Calculator div.button button {
+        font-size: 14px;
     }
 }
